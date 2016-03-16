@@ -10,6 +10,11 @@ RUN apt-get update \
   && mkdir /var/run/sshd /etc/ssh/ssh_host_keys \
   && sed -i -e 's@/etc/ssh/ssh_host@/etc/ssh/ssh_host_keys/ssh_host@g' /etc/ssh/sshd_config
 
+# Configure ssh user
+RUN useradd -r -d /home/sftp sftp \
+  && mkdir -p /home/sftp/.ssh \
+  && chown -R sftp.sftp /home/sftp
+
 # Define VOLUMES
 VOLUME ["/var/lib/data", "/etc/ssh/ssh_host_keys"]
 
