@@ -2,9 +2,16 @@ FROM debian:jessie
 
 MAINTAINER mickael.canevet@camptocamp.com
 
+# Install github_pki
+ENV GOPATH=/go
+RUN apt-get update && apt-get install -y golang-go git \
+  && go get github.com/camptocamp/github_pki \
+  && apt-get autoremove -y golang-go git \
+  && rm -rf /var/lib/apt/lists/*
+
 # Install and configure openssh-server
 RUN apt-get update \
-  && apt-get install -y openssh-server ruby \
+  && apt-get install -y openssh-server \
   && rm -f /etc/ssh/ssh_host_*_key* \
   && rm -rf /var/lib/apt/lists/* \
   && mkdir /var/run/sshd /etc/ssh/ssh_host_keys \
@@ -17,9 +24,6 @@ RUN useradd -r -d /home/sftp sftp \
 
 # Define VOLUMES
 VOLUME ["/var/lib/data", "/etc/ssh/ssh_host_keys"]
-
-# Install hooks dependencies
-RUN gem install rack github_api --no-ri --no-rdoc
 
 # Configure entrypoint and command
 COPY docker-entrypoint.sh /
