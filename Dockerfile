@@ -15,7 +15,12 @@ RUN apt-get update \
   && rm -f /etc/ssh/ssh_host_*_key* \
   && rm -rf /var/lib/apt/lists/* \
   && mkdir /var/run/sshd /etc/ssh/ssh_host_keys \
-  && sed -i -e 's@/etc/ssh/ssh_host@/etc/ssh/ssh_host_keys/ssh_host@g' /etc/ssh/sshd_config
+  && sed -i -e 's@/etc/ssh/ssh_host@/etc/ssh/ssh_host_keys/ssh_host@g' /etc/ssh/sshd_config \
+  && sed -i -e 's@^Subsystem sftp .*@Subsystem sftp internal-sftp@' /etc/ssh/sshd_config \
+  && echo "Match User sftp" >> /etc/ssh/sshd_config \
+  && echo "    AllowTcpForwarding no" >> /etc/ssh/sshd_config \
+  && echo "    X11Forwarding no" >> /etc/ssh/sshd_config \
+  && echo "    ForceCommand internal-sftp" >> /etc/ssh/sshd_config
 
 # Configure ssh user
 RUN useradd -r -d /home/sftp sftp \
