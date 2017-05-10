@@ -25,7 +25,8 @@ RUN apt-get update \
 # Configure ssh user
 RUN useradd -r -d /home/sftp sftp \
   && mkdir -p /home/sftp/.ssh \
-  && chown -R sftp.sftp /home/sftp
+  && chown -R sftp.sftp /home/sftp \
+  && ln -s /var/lib/data /home/sftp/data
 
 # Define VOLUMES
 VOLUME ["/var/lib/data", "/etc/ssh/ssh_host_keys"]
