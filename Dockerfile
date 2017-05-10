@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y golang-go git \
 
 # Install and configure openssh-server
 RUN apt-get update \
-  && apt-get install -y openssh-server \
+  && apt-get install -y openssh-server rsync \
   && rm -f /etc/ssh/ssh_host_*_key* \
   && rm -rf /var/lib/apt/lists/* \
   && mkdir /var/run/sshd /etc/ssh/ssh_host_keys \
